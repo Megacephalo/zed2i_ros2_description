@@ -9,9 +9,12 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     pkg_path = FindPackageShare('zed2i_ros2_description').find('zed2i_ros2_description')
     xacro_file_path = f'{pkg_path}/model/zed2i_urdf.xacro'
+    rviz_config_file = f'{pkg_path}/launch/zed2i_camera_model_view.rviz'
 
     assert Path(xacro_file_path).exists(), f'URDF file not found at {xacro_file_path}'
     assert Path(xacro_file_path).is_file(), f'URDF file {xacro_file_path} is NOT a file'
+    assert Path(rviz_config_file).exists(), f'RVIZ config file not found at {rviz_config_file}'
+    assert Path(rviz_config_file).is_file(), f'RVIZ config file {rviz_config_file} is NOT a file'
 
     print(f'Reading xacro file: {xacro_file_path}')
 
@@ -41,7 +44,8 @@ def generate_launch_description():
             package='rviz2',
             executable='rviz2',
             name='rviz2',
-            # output='screen'
+            output='screen',
+            arguments=["-d", rviz_config_file]
         )
     )
 
